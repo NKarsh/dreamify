@@ -1,6 +1,15 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
+import { configureStore } from "@reduxjs/toolkit";
+import dreamsReducer from "@/store/dreamsSlice";
+import { Provider } from "react-redux";
+
+const store = configureStore({
+  reducer: {
+    dreams: dreamsReducer,
+  },
+});
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -16,7 +25,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={inter.className}>{children}</body>
+      <Provider store={store}>
+        <body className={inter.className}>{children}</body>
+      </Provider>
     </html>
   );
 }
