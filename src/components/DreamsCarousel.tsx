@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useState } from "react";
 import {
   Carousel,
   CarouselContent,
@@ -7,27 +7,44 @@ import {
 } from "@/components/ui/carousel";
 import { useSelector } from "react-redux";
 import { RootType } from "@/store/dreamsSlice";
-import { motion, useMotionValue, useTransform } from "framer-motion";
+import {
+  AnimatePresence,
+  motion,
+  useMotionValue,
+  useTransform,
+} from "framer-motion";
 
 const DreamsCarousel = () => {
+  const [selectedId, setSelectedId] = useState<string>("");
   const dreams = useSelector(
     (state: { dreams: RootType }) => state.dreams.value
   );
 
   return (
-    <Carousel className="h-full w-full mt-3">
+    <Carousel className="mt-3 max-w-[30rem]">
       <CarouselContent className="-ml-1">
-        {dreams.map((dream, index) => (
-          <CarouselItem key={index} className="pl-1 md:basis-1/2 lg:basis-1/3">
-            <motion.div
-              className="p-1 bg-white hover:cursor-pointer"
-              whileHover={{ scale: 0.9 }}
-              whileTap={{ scale: 0.9 }}
-            >
-              {dream.description}
-            </motion.div>
-          </CarouselItem>
-        ))}
+        {[...dreams]
+          .sort((a, b) => b.date.getTime() - a.date.getTime())
+          .map((dream, index) => (
+            <CarouselItem key={index} className="pl-1">
+              <motion.div
+                className="p-3 bg-white rounded-lg select-none"
+                onClick={() => setSelectedId(dream._id)}
+                whileHover={{ scale: 0.95 }}
+                whileTap={{ scale: 0.95 }}
+              >
+                <div className="flex items-center font-bold">
+                  {dream.name}
+                  <div className="ml-5 text-sm text-gray-400 font-light">
+                    {dream.date.toDateString()}
+                  </div>
+                </div>
+                <div>{dream.description}</div>
+                <div className="mt-2 text-gray-400">Explanation</div>
+                <div>{dream.explanation}</div>
+              </motion.div>
+            </CarouselItem>
+          ))}
       </CarouselContent>
     </Carousel>
   );

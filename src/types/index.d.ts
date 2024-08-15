@@ -1,8 +1,9 @@
 export interface Dream {
-  _id?: string;
-  name?: string;
+  _id: string;
+  userId: string;
+  name: string;
   description: string;
-  explaination?: string;
+  explanation?: string;
   date: Date;
 }
 

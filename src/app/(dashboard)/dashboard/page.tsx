@@ -5,7 +5,7 @@ import HeatMapCard from "@/components/HeatMapCard";
 import DreamsCarousel from "@/components/DreamsCarousel";
 
 const Dashboard = () => {
-  const [name, setName] = useState<string>("Nitzan");
+  const [name, setName] = useState<string>("");
 
   return (
     <div className="grid gap-4">
