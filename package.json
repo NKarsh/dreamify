@@ -16,6 +16,7 @@
     "@uiw/react-tooltip": "^4.22.3",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
+    "embla-carousel-react": "^8.1.8",
     "framer-motion": "^11.3.24",
     "js-confetti": "^0.12.0",
     "lucide-react": "^0.427.0",

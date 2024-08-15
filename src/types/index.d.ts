@@ -1,5 +1,12 @@
 export interface Dream {
-  name: string;
-  decription: string;
+  _id?: string;
+  name?: string;
+  description: string;
   explaination?: string;
+  date: Date;
+}
+
+export interface DateCount {
+  date: string;
+  count: number;
 }
