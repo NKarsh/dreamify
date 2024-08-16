@@ -55,7 +55,11 @@ export default function DashboardLayout({
   }, [dispatch, username, loading]);
 
   if (username.trim() === "") {
-    return <div>You must enter user name</div>;
+    return (
+      <div className="w-full flex justify-center font-bold">
+        You must enter user name
+      </div>
+    );
   }
 
   if (loading || error) return <div></div>;
