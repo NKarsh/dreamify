@@ -1,9 +1,10 @@
 "use client";
 import { setDreams } from "@/store/dreamsSlice";
+import { RootType } from "@/store/userSlice";
 import { Dream } from "@/types";
 import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 export async function getDreamsForUser() {
   try {
@@ -31,6 +32,9 @@ export default function DashboardLayout({
 }) {
   const [error, setError] = useState(false);
   const [loading, setLoading] = useState(true);
+  const username: string = useSelector(
+    (state: { username: RootType }) => state.username.value
+  );
   const dispach = useDispatch();
 
   useEffect(() => {
@@ -50,6 +54,9 @@ export default function DashboardLayout({
 
   if (loading || error) return <div></div>;
 
+  if (username.trim() === "") {
+    return <div>You must enter user name</div>;
+  }
   return (
     <div>
       <div className="flex w-full h-full">
