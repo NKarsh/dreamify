@@ -11,13 +11,13 @@ const Landing = () => {
   const username: string = useSelector(
     (state: { username: RootType }) => state.username.value
   );
-  const dispach = useDispatch();
+  const dispatch = useDispatch();
   const router = useRouter();
 
   const handleSubmit = () => {
     if (usernameKey.trim() === "") setError("something went wrong, try again");
     else {
-      dispach(setUserName(usernameKey));
+      dispatch(setUserName(usernameKey));
       router.push("/dreams");
     }
   };

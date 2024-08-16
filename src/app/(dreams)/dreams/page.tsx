@@ -12,7 +12,7 @@ const Dashboard = () => {
     (state: { username: RootType }) => state.username.value
   );
   const router = useRouter();
-  const dispach = useDispatch();
+  const dispatch = useDispatch();
 
   return (
     <div className="grid gap-4">
@@ -23,7 +23,7 @@ const Dashboard = () => {
                      rounded-full bg-red-400 text-white 
                      p-1 hover:cursor-pointer text-sm"
           onClick={() => {
-            dispach(deleteUserName(""));
+            dispatch(deleteUserName(""));
             router.push("/");
           }}
         >

@@ -33,7 +33,7 @@ async function analyzeDream(dreamDescription: string, username: string) {
 
 const DreamInputCard = () => {
   const [dreamContent, setDreamContent] = useState<string>("");
-  const dispach = useDispatch();
+  const dispatch = useDispatch();
   const username: string = useSelector(
     (state: { username: UserRootType }) => state.username.value
   );
@@ -42,7 +42,7 @@ const DreamInputCard = () => {
     analyzeDream(dreamContent, username).then((v) => {
       addConfetti();
       setDreamContent("");
-      dispach(addDream(v));
+      dispatch(addDream(v));
     });
   };
 

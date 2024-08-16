@@ -6,7 +6,7 @@ import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
-export async function getDreamsForUser(username: string) {
+async function getDreamsForUser(username: string): Promise<Dream[]> {
   try {
     const response = await fetch(`/api/dreams?username=${username}`, {
       method: "GET",
@@ -18,7 +18,7 @@ export async function getDreamsForUser(username: string) {
       throw new Error("response was not ok");
     }
     const result = await response.json();
-    return result;
+    return result as Dream[];
   } catch (error) {
     console.error("Error fetching dreams:", error);
     throw error;
@@ -35,13 +35,15 @@ export default function DashboardLayout({
   const username: string = useSelector(
     (state: { username: RootType }) => state.username.value
   );
-  const dispach = useDispatch();
+  const dispatch = useDispatch();
 
   useEffect(() => {
     const fetchDreams = async () => {
+      if (!loading || username.trim() === "") return;
+
       try {
         const fetchedDreams = await getDreamsForUser(username);
-        dispach(setDreams(fetchedDreams as Dream[]));
+        dispatch(setDreams(fetchedDreams as Dream[]));
       } catch (error) {
         setError(true);
       } finally {
@@ -49,8 +51,8 @@ export default function DashboardLayout({
       }
     };
 
-    if (loading) fetchDreams();
-  }, []);
+    fetchDreams();
+  }, [dispatch, username, loading]);
 
   if (username.trim() === "") {
     return <div>You must enter user name</div>;
