@@ -47,9 +47,9 @@ const DreamInputCard = () => {
   };
 
   return (
-    <div className="grid gap-2 mt-3">
-      <div>Check-in dream</div>
-      <div className="flex justify-center w-[30rem] h-36 max-h-48 bg-white rounded-xl p-2">
+    <div className="grid gap-2 mt-3 w-96">
+      <div className="font-bold">Check-in dream</div>
+      <div className="flex justify-center w-96 sm:w-[30rem] h-36 max-h-48 bg-white rounded-xl p-2">
         <textarea
           disabled={false}
           placeholder="Write your dream here..."

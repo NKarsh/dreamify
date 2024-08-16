@@ -4,6 +4,8 @@ import {
   Carousel,
   CarouselContent,
   CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
 } from "@/components/ui/carousel";
 import { useSelector } from "react-redux";
 import { RootType } from "@/store/dreamsSlice";
@@ -16,7 +18,7 @@ const DreamsCarousel = () => {
   );
 
   return (
-    <Carousel className="mt-3 max-w-[30rem]">
+    <Carousel className="my-3 max-w-96 sm:max-w-[30rem]">
       <CarouselContent className="-ml-1">
         {[...dreams]
           .sort(
@@ -42,6 +44,8 @@ const DreamsCarousel = () => {
             </CarouselItem>
           ))}
       </CarouselContent>
+      <CarouselPrevious />
+      <CarouselNext />
     </Carousel>
   );
 };

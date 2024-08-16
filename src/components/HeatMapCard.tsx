@@ -31,7 +31,7 @@ const HeatMapCard = () => {
   );
 
   return (
-    <div className="flex justify-center w-[30rem] h-32 bg-white rounded-xl p-2">
+    <div className="flex justify-center w-96 sm:w-[30rem] h-32 bg-white rounded-xl p-2">
       <HeatMap
         legendCellSize={0}
         width={"full"}
