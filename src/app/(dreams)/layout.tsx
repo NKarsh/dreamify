@@ -65,14 +65,14 @@ export default function DashboardLayout({
   if (loading || error) return <div></div>;
 
   return (
-    <div>
+    <div className="overflow-hidden">
       <div className="flex w-full h-full">
         <div className="w-full h-full mt-10 flex justify-center items-center">
           {children}
         </div>
       </div>
 
-      <div className="absolute z-[-10]  w-full h-full top-0">
+      <div className="absolute z-[-10] w-full h-full top-0 overflow-hidden">
         <div className="w-full h-full flex justify-center items-center">
           <motion.div
             className="bg-gradient-to-b from-[#FF7BD2]/90 blur-2xl to-[#F58A25]/70  w-[35rem] h-[35rem] rounded-full absolute"
