@@ -1,12 +1,55 @@
 "use client";
-
+import { setDreams } from "@/store/dreamsSlice";
+import { Dream } from "@/types";
 import { motion } from "framer-motion";
+import { useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
+
+export async function getDreamsForUser() {
+  try {
+    const response = await fetch("/api/dreams", {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    if (!response.ok) {
+      throw new Error("response was not ok");
+    }
+    const result = await response.json();
+    return result;
+  } catch (error) {
+    console.error("Error fetching dreams:", error);
+    throw error;
+  }
+}
 
 export default function DashboardLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const [error, setError] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const dispach = useDispatch();
+
+  useEffect(() => {
+    const fetchDreams = async () => {
+      try {
+        const fetchedDreams = await getDreamsForUser();
+        dispach(setDreams(fetchedDreams as Dream[]));
+      } catch (error) {
+        setError(true);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    if (loading) fetchDreams();
+  }, []);
+
+  if (loading || error) return <div></div>;
+
   return (
     <div>
       <div className="flex w-full h-full">

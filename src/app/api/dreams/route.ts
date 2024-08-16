@@ -1,8 +1,7 @@
+import { connectToDatabase } from "@/lib/mongodb";
+import { Dream } from "@/types";
 import { Groq } from "groq-sdk";
-import {
-  ChatCompletionMessageParam,
-  ChatCompletionTool,
-} from "groq-sdk/resources/chat/completions.mjs";
+import { ChatCompletionMessageParam } from "groq-sdk/resources/chat/completions.mjs";
 import { NextRequest, NextResponse } from "next/server";
 
 const client = new Groq({ apiKey: process.env.GROQ_API_KEY });
@@ -11,6 +10,7 @@ const MODEL = "llama3-groq-70b-8192-tool-use-preview";
 export const POST = async (req: NextRequest) => {
   try {
     const { dreamDescription } = await req.json();
+    const { db } = await connectToDatabase();
 
     if (!dreamDescription) {
       return NextResponse.json(
@@ -39,7 +39,7 @@ export const POST = async (req: NextRequest) => {
 
     const responseText = response.choices[0].message.content;
 
-    let jsonResponse;
+    let jsonResponse = { title: "", explanation: "" };
     if (responseText)
       try {
         jsonResponse = JSON.parse(responseText);
@@ -50,7 +50,21 @@ export const POST = async (req: NextRequest) => {
         );
       }
 
-    return NextResponse.json(jsonResponse);
+    const newDraem: Dream = {
+      date: new Date(),
+      description: dreamDescription,
+      explanation: jsonResponse.explanation,
+      title: jsonResponse.title,
+    };
+
+    const result = await db.collection("dreams").insertOne(newDraem);
+
+    const createDream = {
+      _id: result.insertedId,
+      ...newDraem,
+    };
+
+    return NextResponse.json(createDream, { status: 201 });
   } catch (error) {
     return NextResponse.json(
       { error: "An error occurred during processing" },
@@ -58,3 +72,20 @@ export const POST = async (req: NextRequest) => {
     );
   }
 };
+
+export async function GET(req: Request) {
+  try {
+    const { db } = await connectToDatabase();
+    const dreams = (await db
+      .collection("dreams")
+      .find({})
+      .toArray()) as Dream[];
+
+    return NextResponse.json(dreams, { status: 200 });
+  } catch (error) {
+    return NextResponse.json(
+      { message: "Could not retrieve dreams", error },
+      { status: 500 }
+    );
+  }
+}

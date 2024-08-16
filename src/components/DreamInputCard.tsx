@@ -1,7 +1,7 @@
 "use client";
-import { RootType } from "@/store/dreamsSlice";
+import { addDream, RootType } from "@/store/dreamsSlice";
 import React, { useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Button } from "./ui/button";
 import JSConfetti from "js-confetti";
 
@@ -14,7 +14,7 @@ const addConfetti = () => {
 };
 
 async function analyzeDream(dreamDescription: string) {
-  const response = await fetch("/api/groq", {
+  const response = await fetch("/api/dreams", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -27,20 +27,21 @@ async function analyzeDream(dreamDescription: string) {
   }
 
   const data = await response.json();
-  return data; // Assuming the server responds with a `content` field containing the result
+  return data;
 }
 
 const DreamInputCard = () => {
-  const [lastCheckin, setLastCheckin] = useState<Date>(new Date());
   const [dreamContent, setDreamContent] = useState<string>("");
   const dreams = useSelector(
     (state: { dreams: RootType }) => state.dreams.value
   );
+  const dispach = useDispatch();
 
   const analyzeDreamButton = () => {
-    let data = analyzeDream(dreamContent).then((v) => {
+    analyzeDream(dreamContent).then((v) => {
       addConfetti();
-      console.log(v);
+      setDreamContent("");
+      dispach(addDream(v));
     });
   };
 
