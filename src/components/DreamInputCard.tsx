@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Button } from "./ui/button";
 import JSConfetti from "js-confetti";
+import { RootType as UserRootType } from "@/store/userSlice";
 
 const addConfetti = () => {
   const jsConfetti = new JSConfetti();
@@ -13,13 +14,13 @@ const addConfetti = () => {
   });
 };
 
-async function analyzeDream(dreamDescription: string) {
+async function analyzeDream(dreamDescription: string, username: string) {
   const response = await fetch("/api/dreams", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
     },
-    body: JSON.stringify({ dreamDescription }),
+    body: JSON.stringify({ dreamDescription, username }),
   });
 
   if (!response.ok) {
@@ -32,13 +33,13 @@ async function analyzeDream(dreamDescription: string) {
 
 const DreamInputCard = () => {
   const [dreamContent, setDreamContent] = useState<string>("");
-  const dreams = useSelector(
-    (state: { dreams: RootType }) => state.dreams.value
-  );
   const dispach = useDispatch();
+  const username: string = useSelector(
+    (state: { username: UserRootType }) => state.username.value
+  );
 
   const analyzeDreamButton = () => {
-    analyzeDream(dreamContent).then((v) => {
+    analyzeDream(dreamContent, username).then((v) => {
       addConfetti();
       setDreamContent("");
       dispach(addDream(v));

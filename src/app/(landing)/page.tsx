@@ -31,7 +31,9 @@ const Landing = () => {
         name="username"
         className="border-2 rounded-sm p-1"
         placeholder="Write your username"
-        onChange={(e) => setUsernameKey(e.target.value.replace(/\s/g, ""))}
+        onChange={(e) =>
+          setUsernameKey(e.target.value.replace(/\s/g, "").toLocaleLowerCase())
+        }
         value={usernameKey}
       />
       <div className="text-sm text-red-500">{error}</div>

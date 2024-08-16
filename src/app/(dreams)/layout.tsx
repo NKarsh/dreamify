@@ -6,9 +6,9 @@ import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
-export async function getDreamsForUser() {
+export async function getDreamsForUser(username: string) {
   try {
-    const response = await fetch("/api/dreams", {
+    const response = await fetch(`/api/dreams?username=${username}`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -37,10 +37,14 @@ export default function DashboardLayout({
   );
   const dispach = useDispatch();
 
+  if (username.trim() === "") {
+    return <div>You must enter user name</div>;
+  }
+
   useEffect(() => {
     const fetchDreams = async () => {
       try {
-        const fetchedDreams = await getDreamsForUser();
+        const fetchedDreams = await getDreamsForUser(username);
         dispach(setDreams(fetchedDreams as Dream[]));
       } catch (error) {
         setError(true);
@@ -54,9 +58,6 @@ export default function DashboardLayout({
 
   if (loading || error) return <div></div>;
 
-  if (username.trim() === "") {
-    return <div>You must enter user name</div>;
-  }
   return (
     <div>
       <div className="flex w-full h-full">

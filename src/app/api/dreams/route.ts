@@ -9,7 +9,7 @@ const MODEL = "llama3-groq-70b-8192-tool-use-preview";
 
 export const POST = async (req: NextRequest) => {
   try {
-    const { dreamDescription } = await req.json();
+    const { dreamDescription, username } = await req.json();
     const { db } = await connectToDatabase();
 
     if (!dreamDescription) {
@@ -52,6 +52,7 @@ export const POST = async (req: NextRequest) => {
 
     const newDraem: Dream = {
       date: new Date(),
+      userId: username,
       description: dreamDescription,
       explanation: jsonResponse.explanation,
       title: jsonResponse.title,
@@ -75,10 +76,20 @@ export const POST = async (req: NextRequest) => {
 
 export async function GET(req: Request) {
   try {
+    const { searchParams } = new URL(req.url);
+    const username = searchParams.get("username");
+
+    if (!username) {
+      return NextResponse.json(
+        { message: "username is required" },
+        { status: 400 }
+      );
+    }
+
     const { db } = await connectToDatabase();
     const dreams = (await db
       .collection("dreams")
-      .find({})
+      .find({ userId: username })
       .toArray()) as Dream[];
 
     return NextResponse.json(dreams, { status: 200 });
