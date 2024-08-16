@@ -37,10 +37,6 @@ export default function DashboardLayout({
   );
   const dispach = useDispatch();
 
-  if (username.trim() === "") {
-    return <div>You must enter user name</div>;
-  }
-
   useEffect(() => {
     const fetchDreams = async () => {
       try {
@@ -55,6 +51,10 @@ export default function DashboardLayout({
 
     if (loading) fetchDreams();
   }, []);
+
+  if (username.trim() === "") {
+    return <div>You must enter user name</div>;
+  }
 
   if (loading || error) return <div></div>;
 
