@@ -7,7 +7,7 @@ export interface Dream {
   date: Date;
 }
 
-export interface DateCount {
+export interface HeatMapValues {
   date: string;
   count: number;
 }

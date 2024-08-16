@@ -32,7 +32,7 @@ const DreamsCarousel = () => {
                 <div className="flex items-center font-bold">
                   {dream.title}
                   <div className="ml-5 text-sm text-gray-400 font-light">
-                    {dream.date.toString()}
+                    {new Date(dream.date).toDateString()}
                   </div>
                 </div>
                 <div>{dream.description}</div>
